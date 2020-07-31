@@ -15,13 +15,13 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
-
-
+import SplashScreen from "./src/screens/SplashScreen";
+import CountryListing from "./src/screens/CountryListing";
+import CasesByDate from "./src/screens/CasesByDate";
 const App: () => React$Node = () => {
   return (
     <View style={styles.Container}>
-      <Text style={styles.title}>COVID-19 CASES APP</Text>
+     <CasesByDate/>
     </View>
   );
 };
@@ -30,13 +30,9 @@ const styles = StyleSheet.create({
   Container: {
     display:'flex',
     flex:1,
-    justifyContent:'center',
-    alignItems:'center'
+
   },
-  title:{
-    fontSize:20,
-    fontWeight:'700'
-  }
+ 
 });
 
 export default App;
