@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, Text ,StyleSheet} from 'react-native'
+import { View, Text ,StyleSheet,Button} from 'react-native'
 
-const SplashScreen = () => {
+const SplashScreen = ({navigation}) => {
     return (
         <View style={styles.Container}>
          <Text style={styles.title}>COVID-19 CASES APP</Text>
+         <Button title="Goto Countries" onPress={()=>{navigation.navigate('CountryListing')}} />
         </View>
     )
 }

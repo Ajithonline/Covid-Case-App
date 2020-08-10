@@ -1,27 +1,41 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { View, Text,StyleSheet,FlatList, TouchableOpacity } from 'react-native'
 import { colors } from '../config/colors'
 
-const Data=[{id:'1',date:'12th july 2020',cases:1},
-            {id:'2',date:'13th july 2020',cases:3},
-            {id:'3',date:'14th july 2020',cases:3}]
 
-            
+
+
+
+
+const CasesByDate = ({route,navigation}) => {
+
+    const [Data, setData] = useState([])
+
+    const {Slug}=route.params
+    useEffect(() => {
+       fetch('https://api.covid19api.com/dayone/country/'+Slug+'/status/confirmed')
+       .then((response)=>response.json())
+       .then((json)=>setData(json))
+       .catch((error)=>console.error(error))
+       .finally(()=>console.log('Finished'))
+    }, [])
+
+    const renderItem=({item})=>(
+        <Item item={item} />
+    )
+
+                
 const Item=({item})=>(
-   <TouchableOpacity style={styles.item}>
-      <Text style={styles.title}>{item.date}</Text>
-      <Text style={styles.title}>{item.cases}</Text>
-      </TouchableOpacity>
-)
+    <TouchableOpacity style={styles.item}>
+       <Text style={styles.title}>{new Date(item.Date).getDate()+'-'+new Date(item.Date).getMonth()+'-'+new Date(item.Date).getFullYear()}</Text>
+       <Text style={styles.title}>{item.Cases}</Text>
+       </TouchableOpacity>
+ )
 
-const renderItem=({item})=>(
-    <Item item={item} />
-)
-
-const CasesByDate = () => {
+ 
     return (
         <View style={styles.container}>
-            <FlatList data={Data} renderItem={renderItem} />
+            <FlatList keyExtractor={(item,index)=>{index.toString()}} data={Data} renderItem={renderItem} />
         </View>
     )
 }

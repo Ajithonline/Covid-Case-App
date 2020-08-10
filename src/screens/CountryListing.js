@@ -1,23 +1,38 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { View, Text,StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import {colors} from "../config/colors";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const Data=[{id:'1',country:'India'},
-            {id:'2',country:'USA'},
-            {id:'3',country:'Japan'}]
 
-const Item=({item})=>(<TouchableOpacity style={styles.countryItem}>
-    <Text style={styles.countryText}>{item}</Text>
-    <FontAwesome5 size={20} color={colors.secondary}  name={'arrow-right'} />
-    </TouchableOpacity>)
-   
-const renderItem=({item})=>(<Item item={item.country} />)
 
-const CountryListing = () => {
+
+
+const CountryListing = ({navigation}) => {
+
+    const [Data, setData] = useState([])
+
+    useEffect(() => {
+       fetch('https://api.covid19api.com/countries')
+       .then((response)=>response.json())
+       .then((json)=>setData(json))
+       .catch((error)=>console.error(error))
+       .finally(()=>console.log('Finished'))
+    }, [])
+
+    const renderItem=({item})=>(<Item item={item} />)
+
+    const Item=({item})=>(<TouchableOpacity onPress={()=>gotoCases(item)} style={styles.countryItem}>
+        <Text style={styles.countryText}>{item.Country}</Text>
+        <FontAwesome5 size={20} color={colors.secondary}  name={'arrow-right'} />
+        </TouchableOpacity>)
+       
+    function gotoCases(item){
+       navigation.navigate('CasesByDate',{Slug:item.Slug})
+    }
+       
     return (
         <View style={styles.container}>
-          <FlatList data={Data}  renderItem={renderItem}  />
+          <FlatList data={Data}  keyExtractor={(item,index)=>{index.toString()}} renderItem={renderItem}  />
         </View>
     )
 }
